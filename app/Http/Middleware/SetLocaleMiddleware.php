@@ -24,8 +24,6 @@ class SetLocaleMiddleware
     {
         $supported = array_column(LocaleEnum::cases(), 'value');
 
-        return $override === null
-            ? ($request->getPreferredLanguage($supported) ?? Config::string('app.locale'))
-            : $override->value;
+        return $override->value ?? $request->getPreferredLanguage($supported) ?? Config::string('app.locale');
     }
 }

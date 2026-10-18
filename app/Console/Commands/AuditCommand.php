@@ -18,7 +18,8 @@ class AuditCommand extends Command
 {
     public function handle(): int
     {
-        $uuid = $this->argument('project');
+        $arg = $this->argument('project');
+        $uuid = is_string($arg) ? $arg : null;
         $all = $this->option('all');
         $force = (bool) $this->option('force');
 

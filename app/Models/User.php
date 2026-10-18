@@ -93,7 +93,7 @@ class User extends Authenticatable implements HasLocalePreference, PasskeyUser
     {
         $override = $this->localeOverride();
 
-        return $override === null ? Config::string('app.locale') : $override->value;
+        return $override->value ?? Config::string('app.locale');
     }
 
     public function digestContent(): DigestContentEnum
