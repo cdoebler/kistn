@@ -6,10 +6,10 @@ Push-based system for tracking resolved package trees and vulnerabilities across
 
 ```
 Client (cron)
-  ├─ GET  .../hashes                  ← all ecosystem hashes in one call
+  ├─ GET  .../hashes                       ← all ecosystem hashes in one call
   ├─ compare each ecosystem hash locally
   ├─ if all equal → stop
-  └─ if any differ → POST .../inventory   ← bundled: {"ecosystems": {"composer": {...}, "npm": {...}}}
+  └─ if any differ → POST .../inventory    ← bundled: {"ecosystems": {"composer": {...}, "npm": {...}}}
                       POST .../files       ← optional: gzip-compressed lock files (all in one multipart)
 ```
 
@@ -38,10 +38,10 @@ Browser tests need a Playwright Chromium: `npx playwright install chromium`.
 
 | Package | Role |
 |---|---|
-| `kistn/php-client` | Framework-agnostic PHP 8.3+ client — collects Composer/npm packages, computes hashes, pushes via PSR-18 HTTP |
-| `kistn/laravel-client` | Laravel service provider + `inventory:push` Artisan command |
-| `kistn/wp-client` | WordPress plugin client — collects wp-plugin/wp-theme packages, pushes inventory directly to the API |
-| `kistn/js-client` | Framework-agnostic JS/Node.js client — collects npm packages, computes hashes, pushes via fetch |
+| [kistn/php-client](https://github.com/cdoebler/kistn-php) | Framework-agnostic PHP 8.3+ client — collects Composer/npm packages, computes hashes, pushes via PSR-18 HTTP |
+| [kistn/laravel-client](https://github.com/cdoebler/kistn-laravel) | Laravel service provider + `inventory:push` Artisan command |
+| [kistn/wp-client](https://github.com/cdoebler/kistn-wp) | WordPress plugin client — collects wp-plugin/wp-theme packages, pushes inventory directly to the API |
+| [kistn/js-client](https://github.com/cdoebler/kistn-js) | Framework-agnostic JS/Node.js client — collects npm packages, computes hashes, pushes via fetch |
 
 ## API
 
