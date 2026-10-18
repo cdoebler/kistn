@@ -1,0 +1,174 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "kistn/server",
+    "type": "project",
+    "description": "Push-based software package inventory and vulnerability monitor.",
+    "keywords": [
+        "laravel",
+        "inventory",
+        "vulnerability",
+        "security",
+        "composer",
+        "npm",
+        "wordpress"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "dgtlss/warden": "^1.5",
+        "kistn/laravel-client": "^0.1",
+        "laravel/chisel": "^0.1.0",
+        "laravel/fortify": "^1.37.2",
+        "laravel/framework": "^13.7",
+        "laravel/octane": "^2.17",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^3.0",
+        "livewire/flux": "^2.13.1",
+        "livewire/livewire": "^4.1"
+    },
+    "require-dev": {
+        "andreapollastri/checkpoint": "^1.0",
+        "barryvdh/laravel-debugbar": "^4.2",
+        "driftingly/rector-laravel": "^2.4",
+        "fakerphp/faker": "^1.24",
+        "larastan/larastan": "^3.0",
+        "laravel/boost": "^2.2",
+        "laravel/pail": "^1.2.5",
+        "laravel/pao": "^1.0.6",
+        "laravel/pint": "^1.27",
+        "laravel/sail": "^1.53",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.9.3",
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-browser": "^4.3",
+        "pestphp/pest-plugin-laravel": "^4.1",
+        "phpstan/phpstan": "^2.2",
+        "rector/rector": "^2.4",
+        "roave/security-advisories": "dev-latest"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "setup": [
+            "composer install",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate",
+            "@php artisan migrate --force",
+            "npm install",
+            "npm run build"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan queue:listen --tries=1 --timeout=0\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
+        ],
+        "lint": [
+            "pint --parallel"
+        ],
+        "lint:check": [
+            "pint --parallel --test"
+        ],
+        "ci:check-fast": [
+            "Composer\\Config::disableProcessTimeout",
+            "@lint:check",
+            "@rector:check",
+            "@phpstan",
+            "@test:fast"
+        ],
+        "ci:check": [
+            "Composer\\Config::disableProcessTimeout",
+            "@lint:check",
+            "@rector:check",
+            "@phpstan",
+            "@test"
+        ],
+        "ci:check-full": [
+            "Composer\\Config::disableProcessTimeout",
+            "@ci:check",
+            "@mutate"
+        ],
+        "test:cleanup": [
+            "pkill -9 -f '[p]laywright run-server' || true",
+            "pkill -9 -f '[h]eadless_shell' || true"
+        ],
+        "mutate": [
+            "@test:cleanup",
+            "sh scripts/mutate.sh",
+            "@test:cleanup"
+        ],
+        "test:fast": [
+            "@php artisan config:clear --ansi",
+            "@php artisan view:clear --ansi",
+            "@php artisan test --stop-on-failure --parallel --exclude-testsuite=Browser --exclude-group=network --ansi"
+        ],
+        "test": [
+            "@test:cleanup",
+            "@php artisan config:clear --ansi",
+            "@php artisan view:clear --ansi",
+            "@php artisan test --stop-on-failure --parallel --exclude-group=network --ansi",
+            "@test:cleanup"
+        ],
+        "test:network": [
+            "@php artisan config:clear --ansi",
+            "@php artisan view:clear --ansi",
+            "@php artisan test --group=network --ansi"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan boost:update --ansi || exit 0"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "pre-package-uninstall": [
+            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "pest": "vendor/bin/pest --stop-on-failure",
+        "pest-parallel": "vendor/bin/pest --stop-on-failure --parallel",
+        "coverage": "vendor/bin/pest --coverage",
+        "coverage-html": "vendor/bin/pest --coverage-html tests/Coverage",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=512M",
+        "rector": "php -d memory_limit=512M vendor/bin/rector process",
+        "rector:check": "php -d memory_limit=512M vendor/bin/rector process --dry-run"
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [],
+            "installer": {
+                "post-create-project": []
+            }
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "8.4.1"
+        },
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
