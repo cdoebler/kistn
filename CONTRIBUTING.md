@@ -97,6 +97,7 @@ All run via `composer <script>`:
 ## Commits
 
 - Keep commit messages short and precise, focused on the change.
+- No "co-authored-by" or unrelated metadata.
 
 ## Pull requests
 

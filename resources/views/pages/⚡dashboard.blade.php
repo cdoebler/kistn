@@ -200,7 +200,7 @@ new #[Title('Dashboard')] class extends Component {
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-6 p-6">
+<div class="flex h-full w-full flex-1 flex-col gap-6 sm:p-6">
     <div class="flex items-start justify-between">
         <div>
             <flux:heading size="xl">{{ __('Dashboard') }}</flux:heading>
@@ -272,11 +272,11 @@ new #[Title('Dashboard')] class extends Component {
                     <div class="flex flex-col divide-y divide-neutral-100 dark:divide-neutral-800">
                         @foreach($this->needsAttention as $row)
                             <a href="{{ route('projects.packages', $row->project) }}" wire:navigate
-                               class="flex items-center justify-between gap-3 py-2 transition hover:text-accent">
+                               class="flex flex-col gap-1 py-2 transition hover:text-accent xl:flex-row xl:items-center xl:justify-between xl:gap-3">
                                 <span class="truncate font-medium">{{ $row->project->name }}</span>
                                 <div class="flex shrink-0 gap-1">
                                     @if($row->vulns > 0)
-                                        <flux:badge size="sm" color="red">{{ $row->vulns }} {{ __('vulns') }}</flux:badge>
+                                        <flux:badge size="sm" color="red">{{ trans_choice(':count vuln|:count vulns', $row->vulns, ['count' => $row->vulns]) }}</flux:badge>
                                     @endif
                                     @if($row->outdated > 0)
                                         <flux:badge size="sm" color="amber">{{ $row->outdated }} {{ __('outdated') }}</flux:badge>
@@ -320,7 +320,7 @@ new #[Title('Dashboard')] class extends Component {
                         @php($style = $this->actionStyle($event->action))
                         <a href="{{ route('projects.packages', [$event->project, 'ecosystem' => $event->ecosystem->value]) }}" wire:navigate
                            class="flex items-center gap-3 py-2 transition hover:text-accent">
-                            <flux:badge size="sm" :color="$style['color']" :icon="$style['icon']">{{ $event->action->value }}</flux:badge>
+                            <flux:badge size="sm" :color="$style['color']" :icon="$style['icon']">{{ $event->action->label() }}</flux:badge>
                             <span class="truncate font-mono text-sm">{{ $event->package_name }}</span>
                             <span class="ml-auto shrink-0 text-sm text-neutral-500">{{ $event->project->name }}</span>
                             <span class="shrink-0 text-sm text-neutral-400">{{ $event->occurred_at?->diffForHumans() }}</span>

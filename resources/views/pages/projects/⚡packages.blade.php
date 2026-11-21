@@ -296,7 +296,7 @@ class extends Component {
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-6 p-6">
+<div class="flex h-full w-full flex-1 flex-col gap-6 sm:p-6">
     <div>
         <flux:link :href="route('projects.index', $project)" wire:navigate
                    class="flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300">
@@ -304,9 +304,9 @@ class extends Component {
         </flux:link>
     </div>
 
-    <div class="flex items-start justify-between">
-        <div>
-            <flux:heading size="xl">{{ $project->name }}: {{ __('Packages') }}</flux:heading>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+            <flux:heading size="xl" class="break-words">{{ $project->name }}: {{ __('Packages') }}</flux:heading>
             <flux:subheading>{{ __('All resolved packages tracked for this project') }}</flux:subheading>
             @if($this->currentEcosystemState?->last_pushed_at !== null)
                 <flux:text class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
@@ -315,7 +315,7 @@ class extends Component {
             @endif
         </div>
         <flux:button :href="route('projects.edit', $project)" wire:navigate variant="ghost"
-                     icon="adjustments-horizontal">
+                     icon="adjustments-horizontal" class="self-start">
             {{ __('Project Settings') }}
         </flux:button>
     </div>
@@ -327,7 +327,7 @@ class extends Component {
             <flux:subheading>{{ __('Push an inventory to get started.') }}</flux:subheading>
         </div>
     @else
-        <div class="flex gap-1 border-b border-zinc-200 dark:border-zinc-700" role="tablist">
+        <div class="flex gap-1 overflow-x-auto border-b border-zinc-200 dark:border-zinc-700" role="tablist">
             @foreach($this->ecosystemCounts as $ecoValue => $count)
                 <button
                     type="button"
@@ -335,7 +335,7 @@ class extends Component {
                     aria-selected="{{ $ecosystem === $ecoValue ? 'true' : 'false' }}"
                     wire:click="$set('ecosystem', '{{ $ecoValue }}')"
                     wire:key="ecosystem-tab-{{ $ecoValue }}"
-                    class="px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors {{ $ecosystem === $ecoValue ? 'border-zinc-900 text-zinc-900 dark:border-white dark:text-white' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300' }}"
+                    class="shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors {{ $ecosystem === $ecoValue ? 'border-zinc-900 text-zinc-900 dark:border-white dark:text-white' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300' }}"
                 >
                     {{ \App\Enums\EcosystemEnum::from($ecoValue)->label() }} ({{ $count }})
                     @php $ecoVulnCount = $this->vulnCountsByEcosystem->get($ecoValue, 0) @endphp
@@ -357,12 +357,12 @@ class extends Component {
                 <flux:table.column sortable :sorted="$sortBy === 'name'" :direction="$sortDirection" wire:click="sort('name')">{{ __('Name') }}</flux:table.column>
                 <flux:table.column sortable :sorted="$sortBy === 'version'" :direction="$sortDirection" wire:click="sort('version')">{{ __('Version') }}</flux:table.column>
                 <flux:table.column sortable :sorted="$sortBy === 'latest_version'" :direction="$sortDirection" wire:click="sort('latest_version')">{{ __('Latest') }}</flux:table.column>
-                <flux:table.column>{{ __('Type') }}</flux:table.column>
+                <flux:table.column class="hidden md:table-cell">{{ __('Type') }}</flux:table.column>
                 @if($this->ecosystem === \App\Enums\EcosystemEnum::WpTheme->value)
-                    <flux:table.column>{{ __('Child') }}</flux:table.column>
+                    <flux:table.column class="hidden md:table-cell">{{ __('Child') }}</flux:table.column>
                 @endif
                 @if($this->hasDepthAttribute)
-                    <flux:table.column sortable :sorted="$sortBy === 'depth'" :direction="$sortDirection" wire:click="sort('depth')">{{ __('Depth') }}</flux:table.column>
+                    <flux:table.column class="hidden md:table-cell" sortable :sorted="$sortBy === 'depth'" :direction="$sortDirection" wire:click="sort('depth')">{{ __('Depth') }}</flux:table.column>
                 @endif
                 <flux:table.column>{{ __('Vulnerabilities') }}</flux:table.column>
             </flux:table.columns>
@@ -399,7 +399,7 @@ class extends Component {
                                 <span class="text-zinc-500 dark:text-zinc-400">—</span>
                             @endif
                         </flux:table.cell>
-                        <flux:table.cell>
+                        <flux:table.cell class="hidden md:table-cell">
                             <div class="flex items-center gap-1.5">
                                 <flux:text>{{ ($package->is_direct) ? __('Direct') : __('Dep') }}</flux:text>
                                 @if($package->is_dev)
@@ -411,7 +411,7 @@ class extends Component {
                             </div>
                         </flux:table.cell>
                         @if($this->ecosystem === \App\Enums\EcosystemEnum::WpTheme->value)
-                            <flux:table.cell>
+                            <flux:table.cell class="hidden md:table-cell">
                                 @if($package->is_child)
                                     <flux:badge size="sm" color="zinc">{{ __('child') }}</flux:badge>
                                 @else
@@ -420,7 +420,7 @@ class extends Component {
                             </flux:table.cell>
                         @endif
                         @if($this->hasDepthAttribute)
-                            <flux:table.cell>{{ $package->depth ?? '—' }}</flux:table.cell>
+                            <flux:table.cell class="hidden md:table-cell">{{ $package->depth ?? '—' }}</flux:table.cell>
                         @endif
                         <flux:table.cell>
                             @php $topFinding = $this->activeFindingsBySeverity->get($package->name) @endphp

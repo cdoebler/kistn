@@ -122,19 +122,19 @@ new #[Title('Edit Project')] class extends Component {
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-6 p-6">
+<div class="flex h-full w-full flex-1 flex-col gap-6 sm:p-6">
     <div>
         <flux:link :href="route('projects.index')" wire:navigate class="flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300">
             {{ __('← All Projects') }}
         </flux:link>
     </div>
 
-    <div class="flex items-start justify-between">
-        <div>
-            <flux:heading size="xl">{{ $project->name }}: {{ __('Settings') }}</flux:heading>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+            <flux:heading size="xl" class="break-words">{{ $project->name }}: {{ __('Settings') }}</flux:heading>
             <flux:subheading>{{ __('Manage project settings and API tokens') }}</flux:subheading>
         </div>
-        <flux:button :href="route('projects.packages', $project)" wire:navigate variant="ghost" icon="archive-box">
+        <flux:button :href="route('projects.packages', $project)" wire:navigate variant="ghost" icon="archive-box" class="self-start">
             {{ __('View Packages') }}
         </flux:button>
     </div>

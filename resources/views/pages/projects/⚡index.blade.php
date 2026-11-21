@@ -68,7 +68,7 @@ new #[Title('Projects')] class extends Component {
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-6 p-6">
+<div class="flex h-full w-full flex-1 flex-col gap-6 sm:p-6">
     <div class="flex items-start justify-between">
         <div>
             <flux:heading size="xl">{{ __('Projects') }}</flux:heading>

@@ -14,6 +14,7 @@ use App\Notifications\ProjectChangesNotification;
 use App\Services\NotificationDispatcherService;
 use App\Services\SiblingFindingNotifierService;
 use App\Services\SiblingOutdatedNotifierService;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -62,7 +63,7 @@ function fakeComposerBinary(string $auditJson, int $auditExitCode, string $outda
 
     return function () use ($binDir, $originalPath): void {
         putenv('PATH='.$originalPath);
-        unlink($binDir.'/composer');
+        File::delete($binDir.'/composer');
         rmdir($binDir);
     };
 }

@@ -279,5 +279,8 @@
     ":count project updated|:count projects updated": ":count Projekt aktualisiert|:count Projekte aktualisiert",
     ":count vuln|:count vulns": ":count Schwachst.|:count Schwachst.",
     "Only vulnerable": "Nur verwundbare",
-    "No vulnerable packages in this ecosystem.": "Keine verwundbaren Pakete in diesem Ökosystem."
+    "No vulnerable packages in this ecosystem.": "Keine verwundbaren Pakete in diesem Ökosystem.",
+    "added": "hinzugefügt",
+    "updated": "aktualisiert",
+    "removed": "entfernt"
 }

@@ -10,11 +10,6 @@ use Illuminate\Validation\Rule;
 
 class WpPreflightRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * @return array<string, ValidationRule|array<mixed>|string>
      */

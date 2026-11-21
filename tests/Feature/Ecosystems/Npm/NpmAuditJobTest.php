@@ -14,6 +14,7 @@ use App\Notifications\ProjectChangesNotification;
 use App\Services\NotificationDispatcherService;
 use App\Services\SiblingFindingNotifierService;
 use App\Services\SiblingOutdatedNotifierService;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -56,7 +57,7 @@ function fakeNpmBinary(string $auditJson, string $outdatedJson): callable
 
     return function () use ($binDir, $originalPath): void {
         putenv('PATH='.$originalPath);
-        unlink($binDir.'/npm');
+        File::delete($binDir.'/npm');
         rmdir($binDir);
     };
 }
