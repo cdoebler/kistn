@@ -7,12 +7,12 @@
 # Calls pest directly: `php artisan test` treats --min as its own coverage option and
 # silently drops it, so the mutation score would never be enforced.
 #
-# MIN_SCORE is a ratchet: baseline 74.55% on 2026-09-15, identical survivor sets across
+# MIN_SCORE is a ratchet: 74% on 2026-09-15 (74.55% baseline), raised to 75% on 2026-11-21 (75.53%); identical survivor sets across
 # repeated runs. Raise it as the score improves; never lower it to make a change pass.
 set -u
 
 CLASS_SCOPE="App\\Ecosystems,App\\Services,App\\ValueObjects,App\\Models"
-MIN_SCORE=74
+MIN_SCORE=75
 MAX_ATTEMPTS=3
 
 i=1
